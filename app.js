@@ -137,14 +137,10 @@ function buildPopup(lake) {
 
 // ── Marker management ─────────────────────────────────────────────
 function createMarker(lake) {
-  const marker = L.circleMarker([lake.latitude, lake.longitude], {
-    radius: elevRadius(lake.acres),
-    fillColor: elevColor(lake.elevation_ft),
-    color: 'rgba(255,255,255,0.85)',
-    weight: 1.5,
-    opacity: 1,
-    fillOpacity: 0.85,
-  }).addTo(map);
+
+  const marker = L.marker(
+    [lake.latitude, lake.longitude]
+  ).addTo(map);
 
   marker.bindPopup(buildPopup(lake), {
     maxWidth: 300,
