@@ -264,6 +264,16 @@ function applyFilters() {
     // Distance
     if (f.maxDist < 15 && lake.hiking_distance_miles !== 'unknown') {
       const d = parseFloat(lake.hiking_distance_miles);
+    
+      if (lake.name.includes('Rock')) {
+        console.log(
+          lake.name,
+          'distance=', d,
+          'maxDist=', f.maxDist,
+          'exclude=', (!isNaN(d) && d > f.maxDist)
+        );
+      }
+    
       if (!isNaN(d) && d > f.maxDist) return false;
     }
 
