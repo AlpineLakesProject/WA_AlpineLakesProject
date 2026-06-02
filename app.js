@@ -20,6 +20,10 @@ const state = {
   }
 };
 
+function getLakeId(lake) {
+  return `${lake.name}_${lake.county}_${lake.latitude}_${lake.longitude}`;
+}
+
 // ── Elevation → color mapping ─────────────────────────────────────
 function elevColor(elev) {
   if (elev >= 7000) return '#1a4e6e';
@@ -164,7 +168,7 @@ function renderMarkers(lakes) {
   lakes.forEach(lake => {
     if (lake.latitude && lake.longitude && lake.latitude !== 0) {
       const m = createMarker(lake);
-      state.activeMarkers.set(lake.name, m);
+      state.activeMarkers.set(getLakeId(lake), m);
     }
   });
   updateCount(lakes.length);
@@ -203,7 +207,7 @@ function renderList(lakes) {
     `;
 
     li.addEventListener('click', () => {
-      const marker = state.activeMarkers.get(lake.name);
+      const marker = state.activeMarkers.get(getLakeId(lake));
       if (marker) {
         map.setView([lake.latitude, lake.longitude], 13, { animate: true });
         setTimeout(() => marker.openPopup(), 400);
