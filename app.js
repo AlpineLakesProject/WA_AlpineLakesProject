@@ -387,7 +387,7 @@ function initMobileSidebar() {
 // ── Boot ─────────────────────────────────────────────────────────
 async function init() {
   try {
-    const resp = await fetch('data/high_lakes_dataset.json');
+    const resp = await fetch('high_lakes_dataset.json');
     if (!resp.ok) throw new Error('Failed to load dataset');
     state.lakes = await resp.json();
 
