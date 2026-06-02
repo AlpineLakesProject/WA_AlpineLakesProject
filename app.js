@@ -237,6 +237,7 @@ function updateCount(n) {
 
 // ── Filtering ─────────────────────────────────────────────────────
 function applyFilters() {
+  console.log('FILTER RUNNING', state.filters.maxDist);
   const f = state.filters;
   const search = f.search.toLowerCase().trim();
 
