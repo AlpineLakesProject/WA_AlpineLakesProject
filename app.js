@@ -423,7 +423,7 @@ async function init() {
       <div style="display:flex;align-items:center;justify-content:center;height:100%;
         font-family:'DM Sans',sans-serif;color:#5c4a3a;flex-direction:column;gap:12px;background:#f2f7f5;">
         <p style="font-size:18px;font-weight:600;">⚠ Could not load lake data</p>
-        <p style="font-size:13px;color:#8a9a8a;">Make sure data/high_lakes_dataset.json is present and the page is served via HTTP.</p>
+        <p style="font-size:13px;color:#8a9a8a;">Make sure high_lakes_dataset.json is present and the page is served via HTTP.</p>
       </div>`;
   }
 }
