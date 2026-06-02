@@ -42,12 +42,13 @@ const map = L.map('map', {
   preferCanvas: true,
 });
 
-// Base layer: USGS Topo
-L.tileLayer('https://basemap.nationalmap.gov/arcgis/rest/services/USGSHydroNHD/MapServer/tile/{z}/{y}/{x}', {
-  attribution: '© USGS National Map · WDFW',
-  maxZoom: 16,
-  opacity: 0.9,
-}).addTo(map);
+L.tileLayer(
+  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+  }
+).addTo(map);
 
 // Slight overlay for readability
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
