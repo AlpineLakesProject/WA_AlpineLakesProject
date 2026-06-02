@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>High Lakes Explorer · Washington WDFW</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header id="app-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 3 L33 28 L3 28 Z" fill="currentColor" opacity="0.15"/>
+            <path d="M18 3 L33 28 L3 28 Z" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M4 28 Q10 20 18 24 Q26 28 32 20" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <circle cx="18" cy="24" r="2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">High Lakes Explorer</span>
+          <span class="brand-sub">Washington WDFW · King · Kittitas · Chelan</span>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-chip" id="stat-visible"><span class="stat-num" id="visible-count">421</span><span class="stat-label">Lakes</span></div>
+        <div class="stat-chip"><span class="stat-num" id="filtered-count">421</span><span class="stat-label">Visible</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar + Map layout -->
+  <div id="app-body">
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-scroll">
+
+        <!-- Search -->
+        <div class="panel search-panel">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" id="search-input" placeholder="Search lake name…" autocomplete="off" />
+            <button id="search-clear" class="clear-btn" title="Clear search">×</button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="panel filters-panel">
+          <div class="panel-header">
+            <span class="panel-title">Filters</span>
+            <button id="reset-filters" class="reset-btn">Reset all</button>
+          </div>
+
+          <!-- County -->
+          <div class="filter-group">
+            <label class="filter-label">County</label>
+            <div class="pill-group" id="county-filters">
+              <button class="pill active" data-value="all">All</button>
+              <button class="pill" data-value="King">King</button>
+              <button class="pill" data-value="Kittitas">Kittitas</button>
+              <button class="pill" data-value="Chelan">Chelan</button>
+            </div>
+          </div>
+
+          <!-- Species -->
+          <div class="filter-group">
+            <label class="filter-label">Species</label>
+            <div class="pill-group" id="species-filters">
+              <button class="pill active" data-value="all">All</button>
+              <button class="pill" data-value="Rainbow trout">Rainbow</button>
+              <button class="pill" data-value="Cutthroat trout">Cutthroat</button>
+              <button class="pill" data-value="Brook trout">Brook</button>
+              <button class="pill" data-value="Golden trout">Golden</button>
+              <button class="pill" data-value="Brown trout">Brown</button>
+            </div>
+          </div>
+
+          <!-- Camping -->
+          <div class="filter-group">
+            <label class="filter-label">Camping</label>
+            <div class="pill-group" id="camping-filters">
+              <button class="pill active" data-value="all">All</button>
+              <button class="pill" data-value="yes">Camping Available</button>
+              <button class="pill" data-value="no">No Camping</button>
+            </div>
+          </div>
+
+          <!-- Hike Distance -->
+          <div class="filter-group">
+            <label class="filter-label">Hiking Distance
+              <span class="filter-val" id="dist-val">Any</span>
+            </label>
+            <div class="range-wrap">
+              <input type="range" id="dist-filter" min="0" max="15" step="0.5" value="15" />
+              <div class="range-labels"><span>0 mi</span><span>15+ mi</span></div>
+            </div>
+          </div>
+
+          <!-- Elevation Gain -->
+          <div class="filter-group">
+            <label class="filter-label">Max Elevation Gain
+              <span class="filter-val" id="gain-val">Any</span>
+            </label>
+            <div class="range-wrap">
+              <input type="range" id="gain-filter" min="0" max="5000" step="100" value="5000" />
+              <div class="range-labels"><span>0 ft</span><span>5000+ ft</span></div>
+            </div>
+          </div>
+
+          <!-- Lake Elevation -->
+          <div class="filter-group">
+            <label class="filter-label">Min Lake Elevation
+              <span class="filter-val" id="elev-val">Any</span>
+            </label>
+            <div class="range-wrap">
+              <input type="range" id="elev-filter" min="3000" max="8000" step="100" value="3000" />
+              <div class="range-labels"><span>3000 ft</span><span>8000 ft</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lake List -->
+        <div class="panel list-panel">
+          <div class="panel-header">
+            <span class="panel-title">Lakes</span>
+            <span class="panel-title-sub" id="list-count-label">Showing 421</span>
+          </div>
+          <ul id="lake-list"></ul>
+          <div id="list-empty" class="list-empty" style="display:none">
+            <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke="currentColor" stroke-width="1.5" opacity="0.3"/><path d="M14 20h12M20 14v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/></svg>
+            <p>No lakes match your filters</p>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Map container -->
+    <main id="map-container">
+      <div id="map"></div>
+
+      <!-- Mobile toggle -->
+      <button id="sidebar-toggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 20 20" fill="none"><path d="M4 6h12M4 10h12M4 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- Legend -->
+      <div id="map-legend">
+        <div class="legend-title">Elevation</div>
+        <div class="legend-items">
+          <span class="legend-dot" style="background:#4ecdc4"></span><span>3000–4500 ft</span>
+          <span class="legend-dot" style="background:#45b7d1"></span><span>4500–6000 ft</span>
+          <span class="legend-dot" style="background:#2c7da0"></span><span>6000–7000 ft</span>
+          <span class="legend-dot" style="background:#1a4e6e"></span><span>7000+ ft</span>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
