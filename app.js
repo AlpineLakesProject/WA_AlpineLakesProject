@@ -289,6 +289,11 @@ function applyFilters() {
     return true;
   });
 
+  console.log(
+  'Rock in filtered list?',
+  state.filtered.some(l => l.name === 'Rock (King County'))
+  );
+
   renderMarkers(state.filtered);
   renderList(state.filtered);
 }
