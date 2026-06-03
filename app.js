@@ -12,7 +12,7 @@ const state = {
   filters: {
     search: '',
     county: 'all',
-    species: 'all',
+    species: [],
     camping: 'all',
     maxDist: 15,
     maxGain: 5000,
@@ -248,10 +248,15 @@ function applyFilters() {
     // County
     if (f.county !== 'all' && lake.county !== f.county) return false;
 
-    // Species
-    if (f.species !== 'all') {
-      const species = lake.species || [];
-      if (!species.includes(f.species)) return false;
+    // Species (must contain ALL selected species)
+    if (f.species.length > 0) {
+      const lakeSpecies = lake.species || [];
+    
+      const hasAllSpecies = f.species.every(
+        species => lakeSpecies.includes(species)
+      );
+    
+      if (!hasAllSpecies) return false;
     }
 
     // Camping
@@ -296,12 +301,55 @@ function applyFilters() {
 // ── Pill filter groups ────────────────────────────────────────────
 function initPillGroup(groupId, stateKey) {
   const group = document.getElementById(groupId);
+
   group.addEventListener('click', e => {
     const pill = e.target.closest('.pill');
     if (!pill) return;
-    group.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    pill.classList.add('active');
-    state.filters[stateKey] = pill.dataset.value;
+
+    const value = pill.dataset.value;
+
+    // Species = multi-select
+    if (stateKey === 'species') {
+
+      if (value === 'all') {
+        state.filters.species = [];
+
+        group.querySelectorAll('.pill')
+          .forEach(p => p.classList.remove('active'));
+
+        pill.classList.add('active');
+
+      } else {
+
+        group.querySelector('[data-value="all"]')
+          .classList.remove('active');
+
+        const idx = state.filters.species.indexOf(value);
+
+        if (idx >= 0) {
+          state.filters.species.splice(idx, 1);
+          pill.classList.remove('active');
+        } else {
+          state.filters.species.push(value);
+          pill.classList.add('active');
+        }
+
+        if (state.filters.species.length === 0) {
+          group.querySelector('[data-value="all"]')
+            .classList.add('active');
+        }
+      }
+
+    } else {
+
+      // Original behavior for County and Camping
+      group.querySelectorAll('.pill')
+        .forEach(p => p.classList.remove('active'));
+
+      pill.classList.add('active');
+      state.filters[stateKey] = value;
+    }
+
     applyFilters();
   });
 }
@@ -348,7 +396,7 @@ function initSearch() {
 function initReset() {
   document.getElementById('reset-filters').addEventListener('click', () => {
     // Reset state
-    state.filters = { search: '', county: 'all', species: 'all', camping: 'all', maxDist: 15, maxGain: 5000, minElev: 3000 };
+    state.filters = { search: '', county: 'all', species: '[]', camping: 'all', maxDist: 15, maxGain: 5000, minElev: 3000 };
 
     // Reset search
     document.getElementById('search-input').value = '';
