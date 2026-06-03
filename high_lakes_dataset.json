@@ -11798,39 +11798,6 @@
     "source_url": "https://wdfw.wa.gov/fishing/locations/high-lakes/rock-king-county"
   },
   {
-    "name": "Rock (King County)",
-    "county": "King",
-    "latitude": 47.545822,
-    "longitude": -121.442925,
-    "acres": 6.2,
-    "elevation_ft": 3876,
-    "species": [
-      "Brook trout",
-      "Rainbow trout",
-      "Cutthroat trout"
-    ],
-    "trailhead_name": "Olallie Lake TH",
-    "hiking_distance_miles": "7.4",
-    "elevation_gain_ft": "2600",
-    "camping": "No",
-    "access_description": "From the Olallie Lake TH, hike approximately 7.4 miles gaining 2,600 feet. Trail is typically accessible July through October.",
-    "wilderness_area": "unknown",
-    "stocking_history": [
-      {
-        "year": 2015,
-        "species": "Brook trout",
-        "count": 943
-      },
-      {
-        "year": 2024,
-        "species": "Rainbow trout",
-        "count": 946
-      }
-    ],
-    "notes": "Rock (King County): 3,876 ft elevation, 6.2 acres. Located in King County, WA.",
-    "source_url": "https://wdfw.wa.gov/fishing/locations/high-lakes/rock-king-county"
-  },
-  {
     "name": "Rockdale Lake",
     "county": "King",
     "latitude": 47.389713,
