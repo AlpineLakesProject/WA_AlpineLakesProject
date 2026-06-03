@@ -1,0 +1,24 @@
+name: Route Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-routes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run route test
+        run: python scripts/route_test.py
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: route-comparison
+          path: reports/route_comparison.csv
